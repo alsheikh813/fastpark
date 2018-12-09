@@ -11,6 +11,7 @@
     "client": "cd react-ui && npm run start",
     "client-install": "cd react-ui && npm install",
     "test": "mocha test/test.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -21,10 +22,12 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "concurrently": "^4.1.0",
     "express": "^4.16.3",
     "jquery": "^3.3.1",
     "mongoose": "^5.3.14",
-    "supertest": "^3.3.0"
+    "supertest": "^3.3.0",
+    "yarn": "^1.12.3"
   },
   "repository": {
     "type": "git",
