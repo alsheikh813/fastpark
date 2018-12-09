@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // Answer API requests.
 
+// var xXx = require('./xXx.js');
+
+var SignUp = require('./signup.js')
 app.post("/signup", function(req, res) {
   db.saveUser(req.body, function(user, err) {
     if (err) console.log("erreeer", err);
@@ -82,6 +85,8 @@ app.post("/addpark", function(req, res) {
     res.send("done");
   });
 });
+
+
 app.delete("/deletepark",function(req,res){
   db.deletePark(req.body.parkId,function(done){
     res.send(done);

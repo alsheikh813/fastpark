@@ -1,23 +1,37 @@
 const mongoose = require("mongoose");
-//mongoose.connect('mongodb://localhost/test');
+
+// TecPros/fastparknew DB url:
+
 mongoose.connect(
   "mongodb://admin:admin123@ds119374.mlab.com:19374/fastpark",
   { useNewUrlParser: true }
 );
+
+// ClustererJSX/fastparknew DB url:
+
+// mongoose.connect(
+//   "mongodb://root:root1root2@ds127604.mlab.com:27604/fastpark",
+//   { useNewUrlParser: true }
+// );
 
 const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 10;
 const db = mongoose.connection;
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
-db.on("error", function() {
-  console.log("mongoose connection error");
+
+db.on("error", function(err) {
+  console.log("Mongoose DB Connection Error:");
+  console.log(err);
 });
 
-db.once("open", function() {
-  console.log("mongoose connected successfully");
+db.once("open", function(msg) {
+  console.log("Mongoose DB Connection - Connected Duccessfully:");
+  console.log(msg);
 });
 
+// Schema (Tables tructure):
+// ------------------------
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -38,6 +52,7 @@ const UserSchema = new Schema({
     required: true
   }
 });
+
 const OwnerSchema = new Schema({
   name: String,
   phoneNumber: String,
