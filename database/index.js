@@ -1,20 +1,23 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-// TecPros/fastparknew DB url:
+
+// TecPros/fastpark DB url:
+// ***************************************************************
 
 mongoose.connect(
   "mongodb://admin:admin123@ds119374.mlab.com:19374/fastpark",
   { useNewUrlParser: true }
 );
 
-// ClustererJSX/fastparknew DB url:
+// ClustererJSX/fastpark DB url:
 
 // mongoose.connect(
 //   "mongodb://root:root1root2@ds127604.mlab.com:27604/fastpark",
 //   { useNewUrlParser: true }
 // );
 
-const bcrypt = require("bcrypt");
+// ***************************************************************
 const SALT_WORK_FACTOR = 10;
 const db = mongoose.connection;
 const Schema = mongoose.Schema;
@@ -25,13 +28,17 @@ db.on("error", function(err) {
   console.log(err);
 });
 
-db.once("open", function(msg) {
-  console.log("Mongoose DB Connection - Connected Duccessfully:");
-  console.log(msg);
+db.once("open", function() {
+  console.log("Mongoose DB Connection - Connected Successfully:");
+  
 });
 
-// Schema (Tables tructure):
+// Tables:
 // ------------------------
+
+// 1. Table User:
+// 1.1 Tables Schema (Structure)
+
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -53,33 +60,14 @@ const UserSchema = new Schema({
   }
 });
 
-const OwnerSchema = new Schema({
-  name: String,
-  phoneNumber: String,
-  email: String,
-  password: String,
-  rating: String,
-  image: String
-});
-const ParkSchema = new Schema({
-  title: String,
-  description: String,
-  long: String,
-  lat: String,
-  location: String,
-  image: String,
-  ownerId: { type: mongoose.Schema.ObjectId, ref: "Owner" },
-  userId: { type: mongoose.Schema.ObjectId, ref: "User" },
-  price: String,
-  startTime: String,
-  endTime: String
-});
-
+// 1.2 
 const User = mongoose.model("User", UserSchema);
-const Owner = mongoose.model("Owner", OwnerSchema);
-const Park = mongoose.model("Park", ParkSchema);
 
-//saving user to Users table
+// 1.3 Table User Functions:
+// ------------------------
+
+// 1.3.1 Create (Save) a user in the DB User table
+
 const saveUser = (data, cb) => {
   hashPassword(data["password"], function(err, hashedPassword) {
     if (err) console.log("HashPassword Error", err);
@@ -97,7 +85,9 @@ const saveUser = (data, cb) => {
     });
   });
 };
-//generating hash password using bcrypt
+
+// 1.3.2 Generating hash password using bcrypt (For User Table)
+
 const hashPassword = function(password, cb) {
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) throw err;
@@ -108,7 +98,9 @@ const hashPassword = function(password, cb) {
     });
   });
 };
-//checking login password with database
+
+//1.3.3 Checking login password with database (For User Table)
+
 const checkPassword = (data, cb) => {
   User.findOne({ email: data.email }, function(err, res) {
     
@@ -124,7 +116,29 @@ const checkPassword = (data, cb) => {
   });
 }
 
-//fix error log in as owner
+
+// ***************************************************************
+ 
+// 2 Table Owner:
+// 2.1 Tables Schema (Structure)
+// ----------------------------
+
+const OwnerSchema = new Schema({
+  name: String,
+  phoneNumber: String,
+  email: String,
+  password: String,
+  rating: String,
+  image: String
+});
+
+// 2.2
+const Owner = mongoose.model("Owner", OwnerSchema);
+
+// 2.3 Table Owner Functions
+// -------------------------
+
+// 2.3.1 Fix error log in as owner
 const checkPasswordOwner = (data, cb) => {
   console.log(data,"OwnerOwnerOwnerOwnerOwnerOwnerdata")
   Owner.findOne({ email: data.email }, function(err, res) {
@@ -140,7 +154,8 @@ const checkPasswordOwner = (data, cb) => {
     }
   });
 }
-//saving owner to the Owners table
+
+// 2.3.2 saving owner to the Owners table
 const saveOwner = (data, cb) => {
   let owner = new Owner({
     name: data["name"],
@@ -157,7 +172,46 @@ const saveOwner = (data, cb) => {
   });
 };
 
-//saving parks to Parks table
+// 2.3.3 Updating the owner rating based on rating after checkout
+const updateOwnerRating = (ownerId, rating, cb) => {
+  console.log(rating,"rating come from FE")
+  owner.updateOne({ _id: ownerId }, { rating: rating }, function(err, res) {
+
+    if (res) {
+      cb(true, null);
+    } else {
+      cb(false, err);
+    }
+  });
+};
+
+// ***************************************************************
+
+// 3 Table Park:
+// 3.1 Tables Schema (Structure)
+// -----------------------------
+
+const ParkSchema = new Schema({
+  title: String,
+  description: String,
+  long: String,
+  lat: String,
+  location: String,
+  image: String,
+  ownerId: { type: mongoose.Schema.ObjectId, ref: "Owner" },
+  userId: { type: mongoose.Schema.ObjectId, ref: "User" },
+  price: String,
+  startTime: String,
+  endTime: String
+});
+
+// 3.2
+const Park = mongoose.model("Park", ParkSchema);
+
+// 2.3 Table Park Functions:
+// ------------------------
+
+// 2.3.1 saving parks to Parks table
 const savePark = (data, cb) => {
   let park = new Park({
     title: data["title"],
@@ -177,8 +231,9 @@ const savePark = (data, cb) => {
   });
 };
 
-//finding all parks based on the provided location
-//using aggregation to get all the owner details from owners table
+// Find All Parks on Location:
+// finding all parks based on the provided location
+// using aggregation to get all the owner details from owners table
 const findParks = (query, cb) => {
   db.collection("parks")
     .aggregate([
@@ -197,8 +252,11 @@ const findParks = (query, cb) => {
       cb(res);
     });
 };
+
+// Find All ownerParks:
 //finding all ownerParks based on the provided ownerId
 //using aggregation to get all the user details from users table
+
 const findOwnerParks = (ownerId, callback) => {
   db.collection("parks")
     .aggregate([
@@ -218,7 +276,10 @@ const findOwnerParks = (ownerId, callback) => {
       callback(null, res);
     });
 };
+
+// Update Park: 
 //updating the park document with userId based on booking and checkout
+
 const updatePark = (parkId, userId, cb) => {
   Park.updateOne({ _id: parkId }, { userId: userId }, function(err, res) {
     if (res) {
@@ -228,6 +289,8 @@ const updatePark = (parkId, userId, cb) => {
     }
   });
 };
+
+// Delete Park:
 const deletePark = function (parkId, cb){
   Park.deleteOne({"_id":ObjectId(parkId)},(err,res)=>{
     if (err) {
@@ -238,23 +301,9 @@ const deletePark = function (parkId, cb){
 };
 
 
-//updating the owner rating based on rating after checkout
-const updateOwnerRating = (ownerId, rating, cb) => {
-  console.log(rating,"rating come from FE")
-  owner.updateOne({ _id: ownerId }, { rating: rating }, function(err, res) {
 
-    if (res) {
-      cb(true, null);
-    } else {
-      cb(false, err);
-    }
-  });
-};
-
-
-
-
-
+// ***************************************************************
+// ***************************************************************
 
 module.exports.saveOwner = saveOwner;
 module.exports.savePark = savePark;
