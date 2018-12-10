@@ -2,17 +2,10 @@ import React from "react";
 import '../index.css';
 import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import {
-  Card,
-  CardImg,
   CardText,
-  CardBody,
-  Form,
   CardTitle,
-  CardSubtitle,
   Button
 } from "reactstrap";
-import { Link } from 'react-router-dom';
-
 
 class GoogleMapsContainer extends React.Component {
   constructor(props) {
@@ -26,7 +19,8 @@ class GoogleMapsContainer extends React.Component {
     this.onMarkerClick = this.onMarkerClick.bind(this);
     this.onMapClick = this.onMapClick.bind(this);
   }
-  componentDidMount() {}
+
+  componentDidMount() { }
   onMarkerClick = (props, marker, e) => {
     console.log("pppppppp", props);
     this.setState({
@@ -48,6 +42,9 @@ class GoogleMapsContainer extends React.Component {
       width: "100%"
     };
 
+    console.log('activeMarker: ', this.state.activeMarker);
+    console.log('showingInfoWindow', this.state.showingInfoWindow);
+
     return (
       <Map
         item
@@ -63,6 +60,7 @@ class GoogleMapsContainer extends React.Component {
             <Marker
               onClick={this.onMarkerClick}
               title={park.title}
+              key={park.title}
               image={park.image}
               description={park.description}
               startTime={park.startTime}
@@ -74,24 +72,23 @@ class GoogleMapsContainer extends React.Component {
           );
         })}
 
-        <InfoWindow 
+        <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
           onClose={this.onMapClick}
         >
-         <img className="mapInf"  width="150px" height="100px" src={this.state.selectedPlace.image}></img>
-         <CardTitle className="mapInf">{this.state.selectedPlace.location}</CardTitle>
-         <CardText className="mapInf">{"Price: "}{this.state.selectedPlace.price}</CardText>
-        <CardText className="mapInf">{"from "}{this.state.selectedPlace.startTime}{" to "}{this.state.selectedPlace.endTime}</CardText>
-       
-        <Button className="buttonMap"  color="primary" >Book Now</Button>
-       
-       
+          <img className="mapInf" width="150px" height="100px" src={this.state.selectedPlace.image} alt=""></img>
+          <CardTitle className="mapInf">{this.state.selectedPlace.location}</CardTitle>
+          <CardText className="mapInf">Price: {this.state.selectedPlace.price}</CardText>
+          <CardText className="mapInf">from {this.state.selectedPlace.startTime} to {this.state.selectedPlace.endTime}</CardText>
+          <Button className="buttonMap" color="primary" >Book Now</Button>
         </InfoWindow>
       </Map>
     );
   }
 }
+
 export default GoogleApiWrapper({
+  //add API key
   apiKey: ""
 })(GoogleMapsContainer);

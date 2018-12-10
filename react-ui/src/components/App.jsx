@@ -3,14 +3,11 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home.jsx";
 import "../App.css";
 import Navbar from "./NavbarCom.jsx";
-import SearchResults from "./SearchResults.js";
-import $ from "jquery";
-import SignUp from "./SignUp.jsx";
+import SearchResults from "./SearchResults.jsx";
 import About from "./About.jsx";
-import SignIn from "./SignIn.jsx";
 import OwnerDashboard from "./OwnerDashboard.jsx";
-import Book from "./book";
-// import CardHome from './CardHome.jsx';
+import Book from "./book.jsx";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +16,7 @@ class App extends Component {
       fetching: true
     };
   }
-  
+
   componentDidMount() {
     // $.ajax({
     //   url: "/ownersignup",
@@ -82,8 +79,6 @@ class App extends Component {
     // });
   }
 
-  
-// render routes 
   render() {
     return (
       <Router>

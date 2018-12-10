@@ -3,7 +3,6 @@ import {
   Button,
   Modal,
   ModalHeader,
-  NavLink,
   ModalBody,
   ModalFooter,
   FormGroup,
@@ -11,51 +10,52 @@ import {
   Input
 } from "reactstrap";
 import $ from "jquery";
- 
 
 class HostSignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
-      username: ""
+      username: '',
+      name: '',
+      email: '',
+      password: '',
+      phoneNumber: ''
     };
 
-    
     this.toggle = this.toggle.bind(this);
     this.signup = this.signup.bind(this);
-  
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   // send post recuest from client to BE to update user and add a new owner on database.
   signup() {
-
     this.toggle()
 
-    const ownerObj ={
+    const ownerObj = {
       name: this.state.name,
       email: this.state.email,
       password: this.state.phoneNumber,
       phoneNumber: this.state.phoneNumber
     }
-    console.log("noooooooooooooooooo",ownerObj)
-        $.ajax({
-        url: "/ownersignup",
-        type: "POST",
-        data: JSON.stringify(ownerObj),
-        contentType: "application/json",
-        success: function(data) {
-          window.localStorage.setItem("user", JSON.stringify(data))
-          console.log("pleasssssss", data);
-        },
-        error: function(error) {
-          console.error("errorrrrrr", error);
-        }
-      });
+
+    console.log("noooooooooooooooooo", ownerObj);
+    $.ajax({
+      url: "/ownersignup",
+      type: "POST",
+      data: JSON.stringify(ownerObj),
+      contentType: "application/json",
+      success: function (data) {
+        window.localStorage.setItem("user", JSON.stringify(data))
+        console.log("pleasssssss", data);
+      },
+      error: function (error) {
+        console.error("errorrrrrr", error);
+      }
+    });
   }
 
-  handleInputChange (event) {
+  handleInputChange(event) {
     const target = event.target;
     const name = target.name;
     const value = target.value;
@@ -68,7 +68,7 @@ class HostSignUp extends React.Component {
     this.setState({
       modal: !this.state.modal
     });
-  
+
   }
 
   render() {
@@ -85,7 +85,6 @@ class HostSignUp extends React.Component {
           <ModalHeader toggle={this.toggle}>Host Car</ModalHeader>
           <ModalBody>
             <FormGroup>
-              {/* /////////// */}
               <Label for="text">User Name</Label>
               <Input
                 type="text"

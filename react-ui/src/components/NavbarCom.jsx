@@ -1,14 +1,5 @@
 import React from "react";
 import {
-  Form,
-  Input,
-  Label,
-  FormGroup,
-  Modal,
-  Button,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Collapse,
   Navbar,
   NavbarToggler,
@@ -16,65 +7,56 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
 } from "reactstrap";
+
 import $ from "jquery"
-// import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import SignUp from "./SignUp.jsx";
 import SignIn from "./SignIn.jsx";
 import HostCar from "./HostCar.jsx";
 import "../style/NavbarCom.css";
-import signUp from "./SignUp.jsx";
-import Book from "./book.js"
-// import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 export default class Example extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isOpen: false,
+      modal: false,
+      hideNav: window.localStorage.getItem('user') ? true : false,
+      //window.localStorage.getItem('user')==null,
+      storage: window.localStorage.getItem('user')
+    };
 
     this.toggle = this.toggle.bind(this);
     // this.signup = this.signup.bind(this);
     // //login
     // this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-
-
-    
-    this.state = {
-      isOpen: false,
-      modal: false,
-       hideNav: window.localStorage.getItem('user')?true:false,
-       //window.localStorage.getItem('user')==null,
-       storage : window.localStorage.getItem('user')
-    };
   }
+
   componentDidMount() {
     $("#searchtxt").hide();
     $("#searchbtn").hide();
   }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
       modal: !this.state.modal,
-      
     });
   }
 
-  logout(){
-    console.log("hhhhhhhhhhhhhh");
+  logout() {
+    console.log("logout function:");
     this.setState({
       storage: window.localStorage.removeItem('user'),
     });
-
   }
 
   render() {
     return (
       <div className="mynav">
-        <Navbar color="navbar-dark bg-dark" dark expand="md" class="nav">
+        <Navbar color="navbar-dark bg-dark" dark expand="md" className="nav">
           <NavbarBrand href="/" className="NavbarBrand">
             ParkIn
           </NavbarBrand>
@@ -97,21 +79,21 @@ export default class Example extends React.Component {
             </button>
 
             <Nav className="ml-auto" navbar>
-            <NavItem style={{'display':this.state.hideNav ? 'none': 'block'}}>
+              <NavItem style={{ 'display': this.state.hideNav ? 'none' : 'block' }}>
                 <HostCar />
               </NavItem>
-              <NavItem  style={{'display':this.state.hideNav ? 'none': 'block'}}>
-                <SignIn handleClick = {this.handleLoginClick}/>
+              <NavItem style={{ 'display': this.state.hideNav ? 'none' : 'block' }}>
+                <SignIn handleClick={this.handleLoginClick} />
               </NavItem>
-              <NavItem style={{'display': this.state.hideNav ? 'none':'block'}}>
+              <NavItem style={{ 'display': this.state.hideNav ? 'none' : 'block' }}>
                 <SignUp />
               </NavItem>
               <NavItem>
-              <NavLink style={{'display': this.state.hideNav === false ?  'none':'block'}} href={"/"} onClick={this.logout}>Log out{this.props.buttonLabel}</NavLink>
+                <NavLink style={{ 'display': this.state.hideNav === false ? 'none' : 'block' }} href={"/"} onClick={this.logout}>Log out{this.props.buttonLabel}</NavLink>
               </NavItem>
-             <NavItem>
-               <NavLink href="/About">About</NavLink>
-             </NavItem>
+              <NavItem>
+                <NavLink href="/About">About</NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
