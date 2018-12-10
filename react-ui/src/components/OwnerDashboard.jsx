@@ -76,45 +76,53 @@ class OwnerDashboard extends React.Component {
   };
 
   handleAddButtonClick = (image, cb) => {
-    this.setState({ isBouncing: true });
-    //starting put request to firebase storage
-    const uploadTask = storage.ref(`images/${image.name}`).put(image);
-    //the on function is event listener that provide 3 functions progress,error,complete
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        // progress function
-      },
-      error => {
-        // error function
-        console.log("errr", error);
-      },
-      () => {
-        // complete function
-        storage
-          .ref("images")
-          .child(image.name)
-          .getDownloadURL()
-          .then(url => {
-            const park = {
-              title: $("#addParkTitle").val(),
-              description: $("#addParkDescription").val(),
-              location: $("#addParkArea")
-                .val()
-                .toLowerCase(),
-              startTime: $("#addParkStart").val(),
-              endTime: $("#addParkEnd").val(),
-              price: `${$("#addParkPrice").val()} JD`,
-              image: url,
-              lat: this.state.lat,
-              long: this.state.long,
-              ownerId: this.state.ownerId
-            };
-            this.saveToDB(park);
-            cb(true);
-          });
-      }
-    );
+    //handle the exception when no image file is selected
+    try {
+      this.setState({ isBouncing: true });
+      //starting put request to firebase storage
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      //the on function is event listener that provide 3 functions progress,error,complete
+      uploadTask.on(
+        "state_changed",
+        snapshot => {
+          // progress function
+        },
+        error => {
+          // error function
+          console.log("errr", error);
+        },
+        () => {
+          // complete function
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then(url => {
+              const park = {
+                title: $("#addParkTitle").val(),
+                description: $("#addParkDescription").val(),
+                location: $("#addParkArea")
+                  .val()
+                  .toLowerCase(),
+                startTime: $("#addParkStart").val(),
+                endTime: $("#addParkEnd").val(),
+                price: `${$("#addParkPrice").val()} JD`,
+                image: url,
+                lat: this.state.lat,
+                long: this.state.long,
+                ownerId: this.state.ownerId
+              };
+              this.saveToDB(park);
+              cb(true);
+            });
+        }
+      );
+    } catch (error) {
+      alert('Error: No image!');
+      console.log('Error: No image!')
+    } finally {
+      this.setState({ isBouncing: false });
+    }
   };
 
   handleDeleteClick = (parkId) => {
