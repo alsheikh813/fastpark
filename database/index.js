@@ -1,27 +1,50 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
-
-// TecPros/fastpark DB url:
 // ***************************************************************
 
+const mongoose = require("mongoose");
+
+// Read - MongooseJS Docs:
+// https://mongoosejs.com/
+
+// Read - MongooseJS mongoose.connect Docs:
+// https://mongoosejs.com/docs/connections.html
+// https://mongoosejs.com/docs/api.html#mongoose_Mongoose-connect
 mongoose.connect(
+  
+  // TecPros/fastpark DB url:
   "mongodb://admin:admin123@ds119374.mlab.com:19374/fastpark",
   { useNewUrlParser: true }
+
+  // ClustererJSX/fastpark DB url:
+  // "mongodb://root:root1root2@ds127604.mlab.com:27604/fastpark",
+  // { useNewUrlParser: true }
 );
 
-// ClustererJSX/fastpark DB url:
-
-// mongoose.connect(
-//   "mongodb://root:root1root2@ds127604.mlab.com:27604/fastpark",
-//   { useNewUrlParser: true }
-// );
+// const mongoose = require("./mongoDBConnection.js");
 
 // ***************************************************************
+
+const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 10;
+// Read - bcrypt Docs:
+// https://www.npmjs.com/package/bcrypt
+
+// ***************************************************************
+
 const db = mongoose.connection;
+// Read - MongooseJS Connections Docs:
+// https://mongoosejs.com/docs/connections.html
+// https://mongoosejs.com/docs/api.html#mongoose_Mongoose-connection
+
+
 const Schema = mongoose.Schema;
+// Read - MongooseJS Schema Doc:
+// https://mongoosejs.com/docs/guide.html
+
 const ObjectId = mongoose.Types.ObjectId;
+// Read - MongooseJS ObjectId Docs:
+// https://mongoosejs.com/docs/schematypes.html#objectids
+
 
 db.on("error", function(err) {
   console.log("Mongoose DB Connection Error:");
@@ -35,6 +58,22 @@ db.once("open", function() {
 
 // Tables:
 // ------------------------
+
+// Read - MongooseJS model Docs:
+// https://mongoosejs.com/docs/models.html
+
+// Read - MongooseJS model Docs Create / save:
+// https://mongoosejs.com/docs/models.html#constructing-documents
+
+// Read - MongooseJS model Docs Query (find, findById, findOne, where):
+// https://mongoosejs.com/docs/models.html#querying
+
+// Read - MongooseJS model (deleting) Docs:
+// https://mongoosejs.com/docs/models.html#deleting
+
+// Read - MongooseJS model (updating) Docs:
+// https://mongoosejs.com/docs/models.html#updating
+
 
 // 1. Table User:
 // 1.1 Tables Schema (Structure)
@@ -305,18 +344,20 @@ const deletePark = function (parkId, cb){
 // ***************************************************************
 // ***************************************************************
 
+// Owners:
 module.exports.saveOwner = saveOwner;
+module.exports.findOwnerParks = findOwnerParks;
+module.exports.checkPasswordOwner = checkPasswordOwner;
+module.exports.updateOwnerRating = updateOwnerRating;
+
+// Parks:
 module.exports.savePark = savePark;
 module.exports.findParks = findParks;
-module.exports.findOwnerParks = findOwnerParks;
-module.exports.saveUser = saveUser;
-module.exports.checkPassword = checkPassword;
-//checkPasswordOwner
-module.exports.checkPasswordOwner = checkPasswordOwner;
-
-module.exports.User = User;
 module.exports.deletePark = deletePark;
 module.exports.updatePark = updatePark;
-// updateOwnerRating
-module.exports.updateOwnerRating = updateOwnerRating;
+
+// User:
+module.exports.User = User;
+module.exports.saveUser = saveUser;
+module.exports.checkPassword = checkPassword;
 
