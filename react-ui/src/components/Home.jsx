@@ -1,17 +1,13 @@
 import React from "react";
 import {
   Card,
-  CardImg,
-  CardText,
   CardBody,
   Form,
-  CardTitle,
-  CardSubtitle,
-  Button
 } from "reactstrap";
+
 import "../style/Home.css";
 import { Link } from "react-router-dom";
-import $ from "jquery";
+
 class CardHome extends React.Component {
   constructor(props) {
     super(props);
@@ -66,9 +62,7 @@ class CardHome extends React.Component {
                 query: this.state.inputValue.toLowerCase()
               }}
             >
-              <Button color="primary" id="btn" href="/searchresults">
-                Search
-              </Button>
+              Search
             </Link>
           </CardBody>
         </Card>
@@ -76,4 +70,5 @@ class CardHome extends React.Component {
     );
   }
 }
+
 export default CardHome;

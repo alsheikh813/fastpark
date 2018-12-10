@@ -4,9 +4,10 @@ import ParkPop from "./ParkPop.jsx";
 import $ from "jquery";
 import "../style/AddPark.css";
 import { storage } from "../firebase/index";
-import OwnerDashboardParkList from "./OwnerDashboardParkList";
+import OwnerDashboardParkList from "./OwnerDashboardParkList.jsx";
 import { Bounce } from "react-activity";
 import "react-activity/dist/react-activity.css";
+
 class OwnerDashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -17,9 +18,10 @@ class OwnerDashboard extends React.Component {
       ownerId: "5c026ba1548c172ce9294538",
       parks: [],
       isBouncing: false,
-      isDeleted : false
+      isDeleted: false
     };
   }
+
   componentDidMount() {
     $("#root").css("background", "white");
     this.getLocation(location => {
@@ -27,6 +29,7 @@ class OwnerDashboard extends React.Component {
     });
     this.fetchParks();
   }
+
   fetchParks() {
     $.ajax({
       url: "/parks",
@@ -36,11 +39,12 @@ class OwnerDashboard extends React.Component {
       success: parks => {
         this.setState({ parks });
       },
-      error: function(error) {
+      error: function (error) {
         console.error("errorrrrrr", error);
       }
     });
   }
+
   getLocation(cb) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -53,6 +57,7 @@ class OwnerDashboard extends React.Component {
       console.log("Geolocation is not supported by this browser.");
     }
   }
+
   saveToDB = data => {
     $.ajax({
       url: "/addpark",
@@ -64,11 +69,12 @@ class OwnerDashboard extends React.Component {
         this.setState({ isBouncing: false });
         this.fetchParks();
       },
-      error: function(error) {
+      error: function (error) {
         console.error("errorrrrrr", error);
       }
     });
   };
+
   handleAddButtonClick = (image, cb) => {
     this.setState({ isBouncing: true });
     //starting put request to firebase storage
@@ -110,24 +116,26 @@ class OwnerDashboard extends React.Component {
       }
     );
   };
-  handleDeleteClick = (parkId)=>{
-    $.ajax({
-        url: "/deletepark",
-        type: "DELETE",
-        data: JSON.stringify({
-          parkId: parkId
 
-        }),
-        contentType: "application/json",
-        success: (data)=> {
-          console.log("pleasssssss", data);
-          this.fetchParks();
-        },
-        error: function(error) {
-          console.error("errorrrrrr", error);
-        }
-      });
+  handleDeleteClick = (parkId) => {
+    $.ajax({
+      url: "/deletepark",
+      type: "DELETE",
+      data: JSON.stringify({
+        parkId: parkId
+
+      }),
+      contentType: "application/json",
+      success: (data) => {
+        console.log("pleasssssss", data);
+        this.fetchParks();
+      },
+      error: function (error) {
+        console.error("errorrrrrr", error);
+      }
+    });
   }
+
   render() {
     return (
       <div>
@@ -135,7 +143,7 @@ class OwnerDashboard extends React.Component {
           <Bounce className="bouncy" animating={this.state.isBouncing} />
           <ParkPop handleAddClick={this.handleAddButtonClick} />
         </div>
-       <OwnerDashboardParkList parks={this.state.parks} handleDelete ={this.handleDeleteClick} />
+        <OwnerDashboardParkList parks={this.state.parks} handleDelete={this.handleDeleteClick} />
       </div>
     );
   }

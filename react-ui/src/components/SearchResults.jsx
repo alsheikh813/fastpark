@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ParksList from "./ParksList.js";
-import GoogleMapsContainer from "./GoogleMapsContainer.js";
+import ParksList from "./ParksList.jsx";
+import GoogleMapsContainer from "./GoogleMapsContainer.jsx";
 import { Container, Row, Col } from "reactstrap";
 import $ from "jquery";
 
@@ -26,7 +26,7 @@ class SearchResults extends Component {
       success: parks => {
         this.setState({ parks });
       },
-      error: function(error) {
+      error: function (error) {
         console.error("errorrrrrr", error);
       }
     });

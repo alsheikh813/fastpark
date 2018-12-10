@@ -3,23 +3,18 @@ import $ from "jquery";
 import { Alert } from "reactstrap";
 
 import { Button } from "reactstrap";
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 import {
   Card,
-  CardImg,
   CardText,
   CardBody,
-  CardLink,
   CardTitle,
   CardSubtitle
 } from "reactstrap";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { Link } from "react-router-dom";
-// import RatingCom from "./Rating.jsx"
 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import Rating from "react-rating";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStroopwafel } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faStroopwafel);
@@ -43,7 +38,8 @@ class book extends React.Component {
 
     this.ratingCount = e;
   };
-// send post recuest from client to BE to update park data
+
+  // send post recuest from client to BE to update park data
   handleCheckOutClick = () => {
     this.toggle();
     $.ajax({
@@ -54,16 +50,15 @@ class book extends React.Component {
         userId: null
       }),
       contentType: "application/json",
-      success: function(data) {
+      success: function (data) {
         console.log("update", data);
       },
-      error: function(error) {
+      error: function (error) {
         console.error("errorrrrrr", error);
       }
     });
 
-    // send post recuest from client to BE to update rating.
-
+    // send post request from client to BE to update rating.
     $.ajax({
       url: "/updateownerrating",
       type: "POST",
@@ -71,10 +66,10 @@ class book extends React.Component {
         rating: this.ratingCount
       }),
       contentType: "application/json",
-      success: function(data) {
+      success: function (data) {
         console.log("update", data);
       },
-      error: function(error) {
+      error: function (error) {
         console.error("errorrrrrr", error);
       }
     });
@@ -88,7 +83,6 @@ class book extends React.Component {
 
   componentDidMount() {
     $("#root").css("background", "white");
-    //////// this.props.location.park.ownerdetails[0]._id
     console.log("parkinfo:", this.props.location.park);
 
     this.getLocation(location => {
@@ -116,7 +110,7 @@ class book extends React.Component {
           <Alert color="success">Your booking has been confirmed!</Alert>
         </div>
         <div className="bookingCard">
-        
+
           <Card>
             <CardBody>
               <CardTitle>
@@ -129,7 +123,7 @@ class book extends React.Component {
             <img
               width="100%"
               src={this.props.location.park.image}
-              alt="Card image cap"
+              alt=""
             />
             <CardBody>
               <CardText>
@@ -147,9 +141,9 @@ class book extends React.Component {
                 rel="noopener noreferrer"
                 href={`http://maps.google.com/maps?saddr=${this.state.lat},${
                   this.state.long
-                }&daddr=${this.props.location.park.lat},${
+                  }&daddr=${this.props.location.park.lat},${
                   this.props.location.park.long
-                }`}
+                  }`}
                 className="btn btn-info"
               >
                 Direction
@@ -167,18 +161,17 @@ class book extends React.Component {
                 <ModalBody>
                   <div>
                     <p>Please rate the Owner park here</p>
-                    <br/>
-                    {/* <Rating  /> */}
+                    <br />
                     <div>
                       {/* <Rating {...this.props} initialRating={this.state.value} />
         <button onClick={this.handleClick}>Reset</button> */}
                       <Rating
                         onChange={this.handleChangeRate}
                         emptySymbol={
-                          <img src="../img/star-empty.png" className="icon" />
+                          <img src="../img/star-empty.png" className="icon" alt="" />
                         }
                         fullSymbol={
-                          <img src="../img/star-full.png" className="icon" />
+                          <img src="../img/star-full.png" className="icon" alt="" />
                         }
                       />
                     </div>
@@ -190,7 +183,6 @@ class book extends React.Component {
                     color="primary"
                     onClick={this.handleCheckOutClick}
                   >
-                
                     Check Out
                   </Button>{" "}
                   <Button color="secondary" onClick={this.toggle}>

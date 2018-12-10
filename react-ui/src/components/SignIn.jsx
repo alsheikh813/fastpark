@@ -6,52 +6,52 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false 
+      modal: false,
+      email: '',
+      password: ''
     };
 
     this.toggle = this.toggle.bind(this);
     this.login = this.login.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-
-
   }
 
-  // send post recuest from client to BE to signin as a user
+  // send post request from client to BE to signin as a user
   login() {
-
+    console.log('logging in!1!!');
     this.toggle()
-
-    const userObj ={
+    const userObj = {
       email: this.state.email,
       password: this.state.password
     }
-    console.log('here signin',userObj);
-        $.ajax({
-        url: "/login",
-        type: "POST",
-        data: JSON.stringify(userObj),
-        contentType: "application/json",
-        success: function(data) {
-          window.localStorage.setItem("user", data)
-          console.log("pleasssssss", data);
-        },
-        error: function(error) {
-          console.error("errorrrrrr", error);
-        }
-      });
-
+    console.log('here signin', userObj);
+    $.ajax({
+      url: "/login",
+      type: "POST",
+      data: JSON.stringify(userObj),
+      contentType: "application/json",
+      success: function (data) {
+        window.localStorage.setItem("user", data)
+        console.log("pleasssssss", data);
+      },
+      error: function (error) {
+        console.error("errorrrrrr", error);
+      }
+    });
   }
 
   toggle() {
+    console.log('toggling!!!')
     this.setState({
       modal: !this.state.modal
     });
   }
 
-  handleInputChange (event) {
+  handleInputChange(event) {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+
     this.setState({
       [name]: value
     });
@@ -68,17 +68,20 @@ class SignIn extends React.Component {
         >
           <ModalHeader toggle={this.toggle}>Sign in</ModalHeader>
           <ModalBody>
-          <FormGroup>
-          <Label for="exampleEmail">Email</Label>
-          <Input type="email" name="email" id="exampleEmail" placeholder="input your Email" value={this.state.email} onChange={this.handleInputChange} />
-        </FormGroup>
-        <FormGroup>
-          <Label for="password">Password</Label>
-          <Input  type="password" name="password" id="password" placeholder="input your password" value={this.state.password} onChange={this.handleInputChange} />
-        </FormGroup>
+            <FormGroup>
+              <Label for="exampleEmail">Email</Label>
+              <Input type="email" name="email" id="exampleEmail" placeholder="input your Email" value={this.state.email} onChange={this.handleInputChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input type="password" name="password" id="password" placeholder="input your password" value={this.state.password} onChange={this.handleInputChange} />
+            </FormGroup>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle} onClick={this.login}>Sign in</Button>{' '}
+            <Button color="primary" onClick={() => {
+              this.toggle();
+              this.login();
+            }} >Sign in</Button>{' '}
             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
