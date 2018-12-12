@@ -7,12 +7,16 @@ import {
 
 import "../style/Home.css";
 import { Link } from "react-router-dom";
+import TimePicker from 'react-time-picker';
+
 
 class CardHome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: ""
+      inputValue: "",
+      startTime: '00:00',
+      endTime: '23:59'
     };
   }
   updateInputValue(evt) {
@@ -20,6 +24,10 @@ class CardHome extends React.Component {
       inputValue: evt.target.value
     });
   }
+
+  onChangeStart = startTime => this.setState({ startTime });
+  onChangeEnd = endTime => this.setState({ endTime });
+
   render() {
     return (
       <div>
@@ -42,24 +50,22 @@ class CardHome extends React.Component {
                 End
               </label>
             </Form>
-            <Form inline>
-              <input
-                type="text"
-                className="form-control"
-                id="Start"
-                placeholder="Start Hour"
-              />
-              <input
-                type="text"
-                className="form-control"
-                id="End"
-                placeholder="End Hour"
-              />
-            </Form>
+
+            <TimePicker
+              onChange={this.onChangeStart}
+              value={this.state.startTime}
+            />
+
+            <TimePicker
+              onChange={this.onChangeEnd}
+              value={this.state.endTime}
+            />
+
             <Link
               to={{
                 pathname: "/SearchResults",
-                query: this.state.inputValue.toLowerCase()
+                query: this.state.inputValue.toLowerCase(),
+                state: { startTime: this.state.startTime, endTime: this.state.endTime }
               }}
             >
               Search
