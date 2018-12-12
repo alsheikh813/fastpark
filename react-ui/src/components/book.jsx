@@ -1,6 +1,7 @@
 import React from "react";
 import $ from "jquery";
 import { Alert } from "reactstrap";
+import { Link } from 'react-router-dom';
 
 import { Button } from "reactstrap";
 import { Container } from "reactstrap";
@@ -31,20 +32,25 @@ class book extends React.Component {
       username: "",
       lat: "",
       long: "",
-      value: 0,
+      value: " ",
       modalCheckOut: false,
       modalPayment: false,
+      modalPaymentAlert: false,
       nestedModal: false,
-      closeAll: false
+      closeAll: false,
+      
+      
 
 
     };
     this.ratingCount = 0;
     // this.toggle = this.toggle.bind(this);
-    this.toggleNested = this.toggleNested.bind(this);
-    this.toggleAll = this.toggleAll.bind(this);
-    this.toggleModalCheckOut = this.toggleModalCheckOut.bind(this);
-    this.toggleModalPayment = this.toggleModalPayment.bind(this);
+    // this.toggleNested = this.toggleNested.bind(this);
+    // this.toggleAll = this.toggleAll.bind(this);
+    // this.toggleModalCheckOut = this.toggleModalCheckOut.bind(this);
+    // this.toggleModalPayment = this.toggleModalPayment.bind(this);
+    // this.toggleModalPaymentAlert = this.toggleModalPaymentAlert.bind(this);
+    // this.alertPayment= this.alertPayment.bind(this);
   }
 
 
@@ -90,9 +96,28 @@ class book extends React.Component {
     });
   };
 
-  toggleModalPayment = () => {
+  /* this function to give alert for cash and payment */
+
+  toggleModalPaymentAlert = () => {
+    
     this.setState({
-      modalPayment: !this.state.modalPayment
+      modalPayment: !this.state.modalPayment,
+      
+    });
+    alert('your book has been confirmed!')
+
+  };
+
+
+
+  toggleModalPayment = () => {
+   
+    this.setState({
+      modalPayment: !this.state.modalPayment,
+     
+      
+     
+    
     });
   };
 
@@ -115,6 +140,14 @@ class book extends React.Component {
       modalCheckOut: !this.state.modalCheckOut
     });
   };
+// make the input only accept numbers
+  onChange = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+       this.setState({value: e.target.value})
+    }
+ }
+
 
 
 
@@ -144,7 +177,7 @@ class book extends React.Component {
     return (
       <Container fluid>
         <div className="directionBtn">
-          <Alert color="success">Your booking has been confirmed!</Alert>
+         
         </div>
         <div className="bookingCard">
 
@@ -191,7 +224,9 @@ class book extends React.Component {
               <Modal isOpen={this.state.modalPayment}  >
                 <ModalHeader >Choose A Method</ModalHeader>
                 <ModalBody>
-                  <Button color="secondary" onClick={this.toggleModalPayment}>Cash</Button>{' '}
+                 
+                  <Button color="secondary"  onClick={this.toggleModalPaymentAlert}>Cash</Button>{' '}
+                  
 
                   <Button color="success" onClick={this.toggleNested}>Credit Card</Button>
                   <Modal isOpen={this.state.nestedModal} toggle={this.toggleNested} onClosed={this.state.closeAll ? this.toggleModalPayment : undefined}>
@@ -207,7 +242,9 @@ class book extends React.Component {
                           <FormGroup>
                             <div className="inputwithicon">
                               <Label for="exampleEmail" hidden>Card number</Label>
-                              <Input type="text" name="card" id="cardnumber" placeholder="Card number" />
+                              <Input type="text" name="card" id="cardnumber" placeholder="Card number"
+                              value={this.state.value} onChange={this.onChange}
+                               />
                               <i className=" fa fa-lock fa-xs" aria-hidden="true"></i>
                             </div>
                           </FormGroup>
@@ -256,8 +293,10 @@ class book extends React.Component {
                           <FormGroup>
                             <div className="inputwithicon" >
 
-                              <Label for="exampleZip" hidden>Security code</Label>
-                              <Input type="text" name="zip" id="exampleZip" placeholder="security code" />
+                              <Label for="exampleZip"  hidden>Security code</Label>
+                              <Input type="text" name="zip" id="exampleZip" placeholder="security code"
+                               value={this.state.value} onChange={this.onChange}
+                               />
                               <i className=" far fa-question-circle" fa-xs aria-hidden="true" ></i>
                             </div>
                           </FormGroup>
@@ -546,13 +585,13 @@ class book extends React.Component {
                       </FormGroup>
                     </Form></ModalBody>
                     <ModalFooter>
-                      <Button color="primary" onClick={this.toggleModalPayment}>Complete Payment</Button>{' '}
+                      <Button color="primary" onClick={this.toggleModalPaymentAlert}>Complete Payment</Button>{' '}
                       <Button color="secondary" onClick={this.toggleModalPayment}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" onClick={this.toggleModalPayment}>Do Something</Button>{' '}
+                 
                   <Button color="secondary" onClick={this.toggleModalPayment}>Cancel</Button>
                 </ModalFooter>
               </Modal>
