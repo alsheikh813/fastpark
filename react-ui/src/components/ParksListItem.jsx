@@ -3,9 +3,6 @@ import { Component } from "react";
 import { Link } from 'react-router-dom';
 import $ from "jquery";
 
-
-
-
 import {
   Card,
   CardImg,
@@ -16,10 +13,6 @@ import {
   Button
 } from "reactstrap";
 
-
-
-
-
 class ParksListItem extends Component {
   constructor(props) {
     super(props);
@@ -28,49 +21,8 @@ class ParksListItem extends Component {
       fetching: true,
       modalsignUp: false,
       modalBook: false
-    
-
-
-
     };
-
-
-
-    // this.toggle = this.toggle.bind(this);
-    // this.changeRoute = this.changeRoute.bind(this);
-    // this.toggleSignUp = this.toggleSignUp.bind(this);
-    // this.toggleBook = this.toggleBook.bind(this);
   }
-
-
-
-  //   toggleSignUp() {
-  //     this.setState({
-  //       modal: !this.state.modalsignUp
-  //     });
-
-  //   }
-
-  //   toggleBook() {
-  //     this.setState({
-  //       modal: !this.state.modalBook
-  //     });
-
-  //   }
-
-  // changeRoute () {
-  //   if (localStorage.getItem("username") === null) {
-  //     //...opensignUp
-  //     this.toggleSignUp()
-  //   } else {
-  //     // render book page
-  //   }
-  //     console.log("test");
-  //   };
- 
-
-
-
 
   handleBookClick = () => {
     if (window.localStorage.getItem("user")) {
@@ -105,16 +57,11 @@ class ParksListItem extends Component {
   }
 
   handleAlert = () => {
-
-    alert("u are not signedIn please signIn first")
+    alert("Please login first.")
   }
 
-
-
   render() {
-    console.log(this.props.parkInfo)
     return (
-
       <div>
         <Card className="mapCardN">
           <CardImg width="100%" src={this.props.parkInfo.image} />
@@ -131,28 +78,24 @@ class ParksListItem extends Component {
             <Link to={{ pathname: "/book", park: this.props.parkInfo }} className="bookButton" >
               <Button className="btn btn-info">Book Now</Button>
             </Link>
-
-
-
-
-
           </CardBody>
         </Card>
       </div>
     );
   }
 }
+
 export default ParksListItem;
 
-            
-                   
-                        
-                   
-                      
-                        
-                        
-                          
-                          
-                         
-                        
-            
+
+
+
+
+
+
+
+
+
+
+
+
