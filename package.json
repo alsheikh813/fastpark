@@ -26,6 +26,8 @@
     "express": "^4.16.3",
     "jquery": "^3.3.1",
     "mongoose": "^5.3.14",
+    "react-facebook-login": "^4.1.1",
+    "react-time-picker": "^3.1.1",
     "supertest": "^3.3.0",
     "yarn": "^1.12.3"
   },

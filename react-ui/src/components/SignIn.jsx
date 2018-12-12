@@ -1,4 +1,5 @@
 import React from 'react';
+import FacebookLogin from 'react-facebook-login';
 import { Button, Modal, NavLink, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
 import $ from "jquery";
 
@@ -8,7 +9,12 @@ class SignIn extends React.Component {
     this.state = {
       modal: false,
       email: '',
-      password: ''
+      password: '',
+      isLoggedIn: false,
+      userID: '',
+      name: '',
+      email: '',
+      picture: ''
     };
 
     this.toggle = this.toggle.bind(this);
@@ -55,8 +61,41 @@ class SignIn extends React.Component {
       [name]: value
     });
   }
-
+  responseFacebook = response  => {
+    // console.log(response);
+    this.setState ({
+      isLoggedIn:true,
+      userID: response.userID,
+      name: response.name,
+      email : response.email,
+      picture: response.picture.data.url
+    })
+  } 
+  componentClicked = () => console.log('clicked');
+  
   render() {
+    let fbContent;
+    if(this.state.isLoggedIn) {
+        fbContent = (
+          <div style = {{
+            width : '400 px',
+            margin : 'auto',
+            background: '#f4f4f4',
+            padding: '20px'
+          }}>
+            <img src={this.state.picture} alt={this.state.name} />
+            <h2>Welcome {this.state.name}</h2>
+            email: {this.state.email}
+          </div>
+        );
+    } else {
+      fbContent = (<FacebookLogin
+        appId="2197146177194580"
+        autoLoad={true}
+        fields="name,email,picture"
+        onClick={this.componentClicked}
+        callback={this.responseFacebook} /> )
+    }
     return (
       <div>
         <NavLink onClick={this.toggle}>Sign in{this.props.buttonLabel}</NavLink>
@@ -65,7 +104,16 @@ class SignIn extends React.Component {
           toggle={this.toggle}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>Sign in</ModalHeader>
+        <div style = {{
+            margin: 'auto',
+            width: '50 %',
+            border: '3px solid none',
+            padding: '10px'
+        }} >
+            <h2>Login with facebook</h2>
+            {fbContent}
+        </div>
+          <ModalHeader toggle={this.toggle}>Sign in Email</ModalHeader>
           <ModalBody>
             <FormGroup>
               <Label for="exampleEmail">Email</Label>
