@@ -31,8 +31,8 @@ class SignIn extends React.Component {
       data: JSON.stringify(userObj),
       contentType: "application/json",
       success: function (data) {
-        window.localStorage.setItem("user", data)
-        console.log("pleasssssss", data);
+        window.localStorage.setItem("user", data);
+        window.location.reload();
       },
       error: function (error) {
         console.error("errorrrrrr", error);
@@ -41,7 +41,6 @@ class SignIn extends React.Component {
   }
 
   toggle() {
-    console.log('toggling!!!')
     this.setState({
       modal: !this.state.modal
     });
