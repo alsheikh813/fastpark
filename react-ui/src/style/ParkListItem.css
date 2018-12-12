@@ -1,0 +1,41 @@
+.inputwithicon input [type=text]{
+    padding-left: 40px;
+}
+.inputwithicon{
+    position: relative;
+}
+
+
+
+
+.inputwithicon i{
+    position:absolute;
+    right: 0;
+    top:15px;
+  padding-right:8px;
+    color:#aaa;
+
+  }
+  img{
+      
+      margin-bottom: 0px;
+      margin-top: 0px;
+  }
+
+  .checkbtn{
+    background-color:rgb(33, 161, 33);
+  
+    color: white;
+  
+    margin-right:10px;
+    margin-bottom: 10px;
+ 
+    padding: 10px 10px 10px 10px; 
+    position: relative;
+   
+    border-radius:5px;
+    text-decoration: none;
+    width:29%;
+ 
+  }
+ 

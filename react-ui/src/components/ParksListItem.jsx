@@ -3,6 +3,9 @@ import { Component } from "react";
 import { Link } from 'react-router-dom';
 import $ from "jquery";
 
+
+
+
 import {
   Card,
   CardImg,
@@ -14,6 +17,9 @@ import {
 } from "reactstrap";
 
 
+
+
+
 class ParksListItem extends Component {
   constructor(props) {
     super(props);
@@ -22,13 +28,20 @@ class ParksListItem extends Component {
       fetching: true,
       modalsignUp: false,
       modalBook: false
+    
+
+
+
     };
+
+
 
     // this.toggle = this.toggle.bind(this);
     // this.changeRoute = this.changeRoute.bind(this);
     // this.toggleSignUp = this.toggleSignUp.bind(this);
     // this.toggleBook = this.toggleBook.bind(this);
   }
+
 
 
   //   toggleSignUp() {
@@ -54,6 +67,9 @@ class ParksListItem extends Component {
   //   }
   //     console.log("test");
   //   };
+ 
+
+
 
 
   handleBookClick = () => {
@@ -83,13 +99,17 @@ class ParksListItem extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
+
     });
   }
 
   handleAlert = () => {
+
     alert("u are not signedIn please signIn first")
   }
+
+
 
   render() {
     console.log(this.props.parkInfo)
@@ -112,12 +132,27 @@ class ParksListItem extends Component {
               <Button className="btn btn-info">Book Now</Button>
             </Link>
 
+
+
+
+
           </CardBody>
         </Card>
       </div>
-
     );
   }
-};
-
+}
 export default ParksListItem;
+
+            
+                   
+                        
+                   
+                      
+                        
+                        
+                          
+                          
+                         
+                        
+            
