@@ -188,7 +188,7 @@ class book extends React.Component {
             
               <Button color="danger" onClick={this.toggleModalPayment}>Payment
             </Button>{" "}
-              <Modal isOpen={this.state.modalPayment} toggle={this.toggleModalPayment} >
+              <Modal   >
                 <ModalHeader >Choose A Method</ModalHeader>
                 <ModalBody>
                   <Button color="secondary" onClick={this.toggleModalPayment}>Cash</Button>{' '}
