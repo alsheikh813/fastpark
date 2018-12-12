@@ -32,7 +32,9 @@ class book extends React.Component {
       username: "",
       lat: "",
       long: "",
-      value: " ",
+      num: " ",
+      code:"",
+      name:"",
       modalCheckOut: false,
       modalPayment: false,
       modalPaymentAlert: false,
@@ -44,13 +46,6 @@ class book extends React.Component {
 
     };
     this.ratingCount = 0;
-    // this.toggle = this.toggle.bind(this);
-    // this.toggleNested = this.toggleNested.bind(this);
-    // this.toggleAll = this.toggleAll.bind(this);
-    // this.toggleModalCheckOut = this.toggleModalCheckOut.bind(this);
-    // this.toggleModalPayment = this.toggleModalPayment.bind(this);
-    // this.toggleModalPaymentAlert = this.toggleModalPaymentAlert.bind(this);
-    // this.alertPayment= this.alertPayment.bind(this);
   }
 
 
@@ -142,11 +137,25 @@ class book extends React.Component {
   };
 // make the input only accept numbers
   onChange = (e) => {
-    const re = /^[0-9\b]+$/;
-    if (e.target.value === '' || re.test(e.target.value)) {
-       this.setState({value: e.target.value})
-    }
- }
+    // const re = /^[0-9\b]+$/;
+    // if (e.target.value === '' || re.test(e.target.value)) {
+       this.setState({
+        num: e.target.num
+        })
+  // }
+ };
+
+ onChangeName = (e) => {
+   this.setState({
+    name: e.target.name
+   })
+ };
+
+ onChangeCode = (e) => {
+  this.setState({
+   code: e.target.code
+  })
+};
 
 
 
@@ -242,8 +251,11 @@ class book extends React.Component {
                           <FormGroup>
                             <div className="inputwithicon">
                               <Label for="exampleEmail" hidden>Card number</Label>
-                              <Input type="text" name="card" id="cardnumber" placeholder="Card number"
-                              value={this.state.value} onChange={this.onChange}
+                              <Input type="text" name="card" id="cardnumber"
+                              
+                               value={this.state.value} onChange={this.onChange}
+                               placeholder="Card number"
+                             
                                />
                               <i className=" fa fa-lock fa-xs" aria-hidden="true"></i>
                             </div>
@@ -295,7 +307,7 @@ class book extends React.Component {
 
                               <Label for="exampleZip"  hidden>Security code</Label>
                               <Input type="text" name="zip" id="exampleZip" placeholder="security code"
-                               value={this.state.value} onChange={this.onChange}
+                           value={this.state.code} onChange={this.onChangeCode}
                                />
                               <i className=" far fa-question-circle" fa-xs aria-hidden="true" ></i>
                             </div>
@@ -307,7 +319,11 @@ class book extends React.Component {
                           <FormGroup>
 
                             <Label for="exampleEmail" hidden>NameOnCard</Label>
-                            <Input type="text" name="card" id="cardnumber" placeholder="Name on card" />
+                            <Input type="text" name="card" id="cardnumber"
+                            name={this.state.name} onChange={this.onChangeName}
+                             placeholder="Name on card"
+                                
+                             />
 
 
                           </FormGroup>
