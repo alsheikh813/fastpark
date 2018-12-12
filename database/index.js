@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 // https://mongoosejs.com/docs/connections.html
 // https://mongoosejs.com/docs/api.html#mongoose_Mongoose-connect
 mongoose.connect(
-  
+
   // TecPros/fastpark DB url:
   "mongodb://admin:admin123@ds119374.mlab.com:19374/fastpark",
   { useNewUrlParser: true }
@@ -46,14 +46,14 @@ const ObjectId = mongoose.Types.ObjectId;
 // https://mongoosejs.com/docs/schematypes.html#objectids
 
 
-db.on("error", function(err) {
+db.on("error", function (err) {
   console.log("Mongoose DB Connection Error:");
   console.log(err);
 });
 
-db.once("open", function() {
+db.once("open", function () {
   console.log("Mongoose DB Connection - Connected Successfully:");
-  
+
 });
 
 // Tables:
@@ -68,6 +68,9 @@ db.once("open", function() {
 // Read - MongooseJS model Docs Query (find, findById, findOne, where):
 // https://mongoosejs.com/docs/models.html#querying
 
+// Read - MongooseJS model Docs Query (findOneAndUpdate):
+// https://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate
+
 // Read - MongooseJS model (deleting) Docs:
 // https://mongoosejs.com/docs/models.html#deleting
 
@@ -75,7 +78,7 @@ db.once("open", function() {
 // https://mongoosejs.com/docs/models.html#updating
 
 
-// 1. Table User:
+// 1. Table User: (Customer)
 // 1.1 Tables Schema (Structure)
 
 const UserSchema = new Schema({
@@ -107,8 +110,8 @@ const User = mongoose.model("User", UserSchema);
 
 // 1.3.1 Create (Save) a user in the DB User table
 
-const saveUser = (data, cb) => {
-  hashPassword(data["password"], function(err, hashedPassword) {
+const saveUser = (data, callback) => {
+  hashPassword(data["password"], function (err, hashedPassword) {
     if (err) console.log("HashPassword Error", err);
     let user = new User({
       name: data["name"],
@@ -118,47 +121,47 @@ const saveUser = (data, cb) => {
       plateNumber: data["plateNumber"],
       email: data["email"]
     });
-    user.save(function(err) {
-      if (err) cb(null, err);
-      cb(user, null);
+    user.save(function (err) {
+      if (err) callback(null, err);
+      callback(user, null);
     });
   });
 };
 
 // 1.3.2 Generating hash password using bcrypt (For User Table)
 
-const hashPassword = function(password, cb) {
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+const hashPassword = function (password, callback) {
+  bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
     if (err) throw err;
 
-    bcrypt.hash(password, salt, function(err, hash) {
-      if (err) return cb(err, null);
-      cb(null, hash);
+    bcrypt.hash(password, salt, function (err, hash) {
+      if (err) return callback(err, null);
+      callback(null, hash);
     });
   });
 };
 
 //1.3.3 Checking login password with database (For User Table)
 
-const checkPassword = (data, cb) => {
-  User.findOne({ email: data.email }, function(err, res) {
-    
+const checkPassword = (data, callback) => {
+  User.findOne({ email: data.email }, function (err, res) {
+
     if (res) {
-      //here i change cb(isMatch,error) to cb(res, err) because i need to send user information in response
-      bcrypt.compare(data.password, res.password, function(err, isMatch) {
-        if (err) return cb(null, err);
-        cb(res._id, err);
+      //here i change callback(isMatch,error) to callback(res, err) because i need to send user information in response
+      bcrypt.compare(data.password, res.password, function (err, isMatch) {
+        if (err) return callback(null, err);
+        callback(res._id, err);
       });
     } else {
-      cb(false, null);
+      callback(false, null);
     }
   });
 }
 
 
 // ***************************************************************
- 
-// 2 Table Owner:
+
+// 2 Table Owner (Parks Owners):
 // 2.1 Tables Schema (Structure)
 // ----------------------------
 
@@ -178,24 +181,27 @@ const Owner = mongoose.model("Owner", OwnerSchema);
 // -------------------------
 
 // 2.3.1 Fix error log in as owner
-const checkPasswordOwner = (data, cb) => {
-  console.log(data,"OwnerOwnerOwnerOwnerOwnerOwnerdata")
-  Owner.findOne({ email: data.email }, function(err, res) {
-    
-    if (res) {
-      //here i change cb(isMatch,error) to cb(res, err) because i need to send user information in response
-      // bcrypt.compare(data.password, res.password, function(err, isMatch) {
-      //   if (err) return cb(null, err);
-        cb(res._id, err);
-    //  });
+const checkPasswordOwner = (data, callback) => {
+  console.log("checkPasswordOwner data: ", data);
+  Owner.findOne(
+    { email: data.email }, 
+    function (err, resulteDB) {
+
+    if (resulteDB) {
+
+      //here i change callback(isMatch,error) to callback(resulteDB, err) because i need to send user information in resulteDBponse
+      // bcrypt.compare(data.password, resulteDB.password, function(err, isMatch) {
+      //   if (err) return callback(null, err);
+      callback(resulteDB._id, null);
+      //  });
     } else {
-      cb(false, null);
+      callback(false, null);
     }
   });
 }
 
 // 2.3.2 saving owner to the Owners table
-const saveOwner = (data, cb) => {
+const saveOwner = (data, callback) => {
   let owner = new Owner({
     name: data["name"],
     phoneNumber: data["phoneNumber"],
@@ -204,22 +210,22 @@ const saveOwner = (data, cb) => {
     rating: data["rating"],
     image: data["image"]
   });
-  owner.save(function(err) {
-    if (err) cb(null, err);
+  owner.save(function (err) {
+    if (err) callback(null, err);
     //returning the auto generated id from the db to be used when adding new parks
-    cb(owner._id, null);
+    callback(owner._id, null);
   });
 };
 
 // 2.3.3 Updating the owner rating based on rating after checkout
-const updateOwnerRating = (ownerId, rating, cb) => {
-  console.log(rating,"rating come from FE")
-  owner.updateOne({ _id: ownerId }, { rating: rating }, function(err, res) {
+const updateOwnerRating = (ownerId, rating, callback) => {
+  console.log(rating, "rating come from FE")
+  owner.updateOne({ _id: ownerId }, { rating: rating }, function (err, res) {
 
     if (res) {
-      cb(true, null);
+      callback(true, null);
     } else {
-      cb(false, err);
+      callback(false, err);
     }
   });
 };
@@ -251,7 +257,7 @@ const Park = mongoose.model("Park", ParkSchema);
 // ------------------------
 
 // 2.3.1 saving parks to Parks table
-const savePark = (data, cb) => {
+const savePark = (data, callback) => {
   let park = new Park({
     title: data["title"],
     description: data["description"],
@@ -264,7 +270,7 @@ const savePark = (data, cb) => {
     startTime: data["startTime"],
     endTime: data["endTime"]
   });
-  park.save(function(err) {
+  park.save(function (err) {
     if (err) throw err;
     cb(true);
   });
@@ -286,7 +292,7 @@ const findParks = (query, cb) => {
         }
       }
     ])
-    .toArray(function(err, res) {
+    .toArray(function (err, res) {
       if (err) throw err;
       cb(res);
     });
@@ -309,7 +315,7 @@ const findOwnerParks = (ownerId, callback) => {
         }
       }
     ])
-    .toArray(function(err, res) {
+    .toArray(function (err, res) {
       console.log(res, err);
       if (err) callback(err, null);
       callback(null, res);
@@ -320,7 +326,7 @@ const findOwnerParks = (ownerId, callback) => {
 //updating the park document with userId based on booking and checkout
 
 const updatePark = (parkId, userId, cb) => {
-  Park.updateOne({ _id: parkId }, { userId: userId }, function(err, res) {
+  Park.updateOne({ _id: parkId }, { userId: userId }, function (err, res) {
     if (res) {
       cb(true, null);
     } else {
@@ -330,11 +336,11 @@ const updatePark = (parkId, userId, cb) => {
 };
 
 // Delete Park:
-const deletePark = function (parkId, cb){
-  Park.deleteOne({"_id":ObjectId(parkId)},(err,res)=>{
+const deletePark = function (parkId, cb) {
+  Park.deleteOne({ "_id": ObjectId(parkId) }, (err, res) => {
     if (err) {
       console.log("delete error", err)
-    } 
+    }
     cb(res)
   });
 };
@@ -342,7 +348,164 @@ const deletePark = function (parkId, cb){
 
 
 // ***************************************************************
+// NEW TABLES:
 // ***************************************************************
+
+// 4. Table userid: (All)
+// 4.1 Tables Schema (Structure)
+
+const UserIDSchema = new Schema({
+
+  userid: {
+    type: String,
+    required: true
+  },
+
+  usertype: {
+    type: String,
+    required: true
+  },
+
+  email: {
+    type: String,
+    required: true
+  },
+
+  firstname: {
+    type: String,
+    required: true
+  },
+
+  middlename: String,
+
+  lastname: {
+    type: String,
+    required: true
+  },
+
+  password: {
+    type: String,
+    required: true
+  },
+
+  phoneNumber: {
+    type: String,
+    required: true
+  }
+});
+
+// 4.2 
+const UserID = mongoose.model("UserID", UserSchema);
+
+// 4.3 Table UserID Functions:
+// --------------------------
+
+// 4.3.1 UserID - Create User:
+
+const createUser = (data, callback) => {
+
+  var errObj = {};
+
+  hashPassword(
+    data["password"],
+    function (err, hashedPassword) {
+      if (err) {
+        console.log("HashPassword Error", err);
+        errObj.type = "HashPassword";
+        errObj.err = err;
+        callback(null, err);
+      } else {
+        
+        var UserID = new UserID({
+          userid: data["userid"],
+          usertype: data["usertype"],
+          email: data["email"],
+          firstname: data["firstname"],
+          middlename: data["middlename"],
+          lastname: data["lastname"],
+          password: hashedPassword,
+        });
+  
+        UserID.save(function (err, resulteDB) {  
+          if (err) {
+            errObj.type = "Can Not Save User";
+            errObj.err = err;
+            callback(null, errObj);
+          } else {
+            console.log("User been added");
+            console.log()
+            callback(resulteDB, null);
+          }
+        });
+      }
+    });
+
+};
+
+// 4.3.2 UserID - Delete User:
+
+const deleteUserID = function (UserID, callback) {
+  var errObj = {};
+  UserID.deleteOne(
+    { "_id": ObjectId(UserID) },
+    function (err, resulteDB) {
+      if (err) {
+        // error msg
+        errObj.type = "deleteUserID error";
+        errObj.err = err;
+        console.log("deleteUserID error: ");
+        console.log(err);
+        callback(null, errObj)
+      }
+      callback(resulteDB, null)
+    }
+  );
+};
+
+// 4.3.* UserID - Update User:
+// (Fix) NOT Working Yet
+
+const updateUserID = (parkId, userId, callback) => {
+  var errObj = {};
+  UserID.updateOne(
+    { _id: parkId },
+    { userId: userId },
+    function (err, res) {
+      if (res) {
+        callback(resulteDB, null);
+      } else {
+        errObj.type = "updateUserID error";
+        errObj.err = err;
+        callback(false, errObj);
+      }
+    });
+};
+
+
+// 4.3.* UserID - Find All User:
+// (Fix) NOT Working Yet
+// model.collection.find({}, callback)
+const findAllUserID = (query, callback) => {
+
+  UserID.collection.find(
+    {},
+    function (err, resulteDB) {
+      var errObj = {};
+      if (err) {
+        errObj.type = "Find All Users";
+        errObj.err = err;
+        callback(false, errObj)
+      } else {
+        callback(resulteDB, null);
+      }
+    }
+  );
+};
+
+
+
+// ***************************************************************
+
 
 // Owners:
 module.exports.saveOwner = saveOwner;

@@ -23,7 +23,8 @@ Dockerfile
 docker-compose.yml
 
 # Other:
-
+/package-lock.json
+/react-ui/package-lock.json
 /yarn.lock
 /package-lock.json
 /react-ui/yarn.lock
