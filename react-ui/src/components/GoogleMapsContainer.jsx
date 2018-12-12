@@ -42,9 +42,6 @@ class GoogleMapsContainer extends React.Component {
       width: "100%"
     };
 
-    console.log('activeMarker: ', this.state.activeMarker);
-    console.log('showingInfoWindow', this.state.showingInfoWindow);
-
     return (
       <Map
         item
