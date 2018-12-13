@@ -106,7 +106,7 @@ app.post("/updateownerrating", (req, res) => {
 // ???
 // handle login post request from client
 app.post("/login", function(req, res) {
-  console.log("Server/Post /login: ")
+  console.log("Server/Post /login: ", req.body)
   db.checkPassword(req.body, function(passRes, err) {
     if (err) {
       console.log("db.checkPassword Error: ");

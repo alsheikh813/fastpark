@@ -144,14 +144,24 @@ const hashPassword = function (password, callback) {
 //1.3.3 Checking login password with database (For User Table)
 
 const checkPassword = (data, callback) => {
-  User.findOne({ email: data.email }, function (err, res) {
+  User.findOne({ email: data.email }, function (err, resulteDB) {
 
-    if (res) {
-      //here i change callback(isMatch,error) to callback(res, err) because i need to send user information in response
-      bcrypt.compare(data.password, res.password, function (err, isMatch) {
-        if (err) return callback(null, err);
-        callback(res._id, err);
-      });
+    if (resulteDB) {
+      console.log("data.password", data.password, "resulteDB.password", resulteDB.password)
+      // here i change callback(isMatch,error) to callback(resulteDB, err) 
+      // because i need to send user information in response
+      bcrypt.compare(
+        data.password,
+        resulteDB.password,
+        function (err, isMatch) {
+          console.log("isMatch", isMatch)
+          if (!isMatch) {
+            callback(null, err);
+          } else {
+            callback(resulteDB._id, err);
+          }
+          
+        });
     } else {
       callback(false, null);
     }
@@ -184,20 +194,20 @@ const Owner = mongoose.model("Owner", OwnerSchema);
 const checkPasswordOwner = (data, callback) => {
   console.log("checkPasswordOwner data: ", data);
   Owner.findOne(
-    { email: data.email }, 
+    { email: data.email },
     function (err, resulteDB) {
 
-    if (resulteDB) {
+      if (resulteDB) {
 
-      //here i change callback(isMatch,error) to callback(resulteDB, err) because i need to send user information in resulteDBponse
-      // bcrypt.compare(data.password, resulteDB.password, function(err, isMatch) {
-      //   if (err) return callback(null, err);
-      callback(resulteDB._id, null);
-      //  });
-    } else {
-      callback(false, null);
-    }
-  });
+        //here i change callback(isMatch,error) to callback(resulteDB, err) because i need to send user information in resulteDBponse
+        // bcrypt.compare(data.password, resulteDB.password, function(err, isMatch) {
+        //   if (err) return callback(null, err);
+        callback(resulteDB._id, null);
+        //  });
+      } else {
+        callback(false, null);
+      }
+    });
 }
 
 // 2.3.2 saving owner to the Owners table
@@ -415,7 +425,7 @@ const createUser = (data, callback) => {
         errObj.err = err;
         callback(null, err);
       } else {
-        
+
         var UserID = new UserID({
           userid: data["userid"],
           usertype: data["usertype"],
@@ -425,8 +435,8 @@ const createUser = (data, callback) => {
           lastname: data["lastname"],
           password: hashedPassword,
         });
-  
-        UserID.save(function (err, resulteDB) {  
+
+        UserID.save(function (err, resulteDB) {
           if (err) {
             errObj.type = "Can Not Save User";
             errObj.err = err;
@@ -506,39 +516,39 @@ const findAllUserID = (query, callback) => {
 const CreditCardSchema = new Schema({
 
   cardnum: {
-    type:Number ,
+    type: Number,
     required: true
   },
-  month:String,
-  year:String,
-  code:Number,
-  name:String,
-  country:String,
-  zip:Number
+  month: String,
+  year: String,
+  code: Number,
+  name: String,
+  country: String,
+  zip: Number
 });
 
-var  Card = mongoose.model('Card', CreditCardSchema);
+var Card = mongoose.model('Card', CreditCardSchema);
 
 const saveCard = (data, callback) => {
 
   //change the value from string to number
- var card0 =  parseInt(data["cardnum"]);
-var codeIn = parseInt(data["code"]);
-var zipIn =parseInt( data["zip"]);
+  var card0 = parseInt(data["cardnum"]);
+  var codeIn = parseInt(data["code"]);
+  var zipIn = parseInt(data["zip"]);
 
-    let Card1 = new Card({
-      cardnum: card0,
-      month: data["month"],
-      year: data["year"],
-      code: codeIn,
-      name: data["name"],
-      country: data["country"],
-      zip:zipIn
-    });
-    Card1.save(function (err) {
-      if (err) callback(null, err);
-      callback(Card1, null);
-    });
+  let Card1 = new Card({
+    cardnum: card0,
+    month: data["month"],
+    year: data["year"],
+    code: codeIn,
+    name: data["name"],
+    country: data["country"],
+    zip: zipIn
+  });
+  Card1.save(function (err) {
+    if (err) callback(null, err);
+    callback(Card1, null);
+  });
 
 };
 
