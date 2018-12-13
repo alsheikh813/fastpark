@@ -137,6 +137,21 @@ app.post("/ownerlogin", function(req, res) {
 
 
 
+//handle creditcard Creation from /card post request
+app.post("/card", function(req, res) {
+  console.log('++++++123')
+  console.log(req.body)
+  db.saveCard2(req.body, function(done, err) {
+    console.log('db.saveCard2')
+    if (err) {
+      console.log(err)
+      throw err;
+    }
+    console.log("saved card");
+    res.send("done");
+  });
+});
+
 
 
 

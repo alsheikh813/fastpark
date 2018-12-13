@@ -505,34 +505,39 @@ const findAllUserID = (query, callback) => {
 // table 5 credit card
 const CreditCardSchema = new Schema({
 
-  carednum: {
+  cardnum: {
     type:Number ,
     required: true
   },
   month:String,
-  year:Number,
+  year:String,
   code:Number,
   name:String,
   country:String,
   zip:Number
 });
 
-const Card = mongoose.model('Card', CreditCardSchema);
+var  Card = mongoose.model('Card', CreditCardSchema);
 
 const saveCard = (data, callback) => {
- 
-    let Card = new Card({
-      carednum: data["cardnum"],
+
+  //change the value from string to number
+ var card0 =  parseInt(data["cardnum"]);
+var codeIn = parseInt(data["code"]);
+var zipIn =parseInt( data["zip"]);
+
+    let Card1 = new Card({
+      cardnum: card0,
       month: data["month"],
       year: data["year"],
-      code: data["code"],
+      code: codeIn,
       name: data["name"],
-      country: dtat["country"],
-      zip: data["zip"]
+      country: data["country"],
+      zip:zipIn
     });
-    Card.save(function (err) {
+    Card1.save(function (err) {
       if (err) callback(null, err);
-      callback(Card, null);
+      callback(Card1, null);
     });
 
 };
@@ -557,3 +562,5 @@ module.exports.User = User;
 module.exports.saveUser = saveUser;
 module.exports.checkPassword = checkPassword;
 
+// card
+module.exports.saveCard2 = saveCard;
