@@ -8,7 +8,6 @@ class SignIn extends React.Component {
     super(props);
     this.state = {
       modal: false,
-      email: '',
       password: '',
       isLoggedIn: false,
       userID: '',
