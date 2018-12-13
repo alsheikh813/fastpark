@@ -169,3 +169,7 @@ a:hover
 .liHover:hover{
   background-color: cornflowerblue !important;
 }
+
+.bgcolor{
+  background-color: lightslategray !important;
+}
