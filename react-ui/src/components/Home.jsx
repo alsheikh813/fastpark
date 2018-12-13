@@ -32,7 +32,7 @@ class CardHome extends React.Component {
     return (
       <div>
         <Card id="homecard">
-          <h4>Choose your Park anywhere any time .</h4>
+          <h4>Your <em>favorite</em> Park anywhere any time.</h4>
           <CardBody>
             <label htmlFor="Where">Where</label>
             <input
@@ -54,11 +54,15 @@ class CardHome extends React.Component {
             <TimePicker
               onChange={this.onChangeStart}
               value={this.state.startTime}
+              className={["timepicker1", "searchbtn"]}
+              clockClassName="clock"
             />
 
             <TimePicker
               onChange={this.onChangeEnd}
               value={this.state.endTime}
+              className={["timepicker2", "searchbtn"]}
+              clockClassName="clock"
             />
 
             <Link
@@ -67,6 +71,7 @@ class CardHome extends React.Component {
                 query: this.state.inputValue.toLowerCase(),
                 state: { startTime: this.state.startTime, endTime: this.state.endTime }
               }}
+              className="btn btn-info"
             >
               Search
             </Link>

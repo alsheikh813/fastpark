@@ -6,6 +6,7 @@
   transform: translate(-60%, 40%);
   width: 400px;
   padding: 10px;
+  background-color: #b4b7bb;
 }
 
 #EndL {
@@ -41,3 +42,26 @@ h4 {
   width: 157px;
 }
 
+.timepicker1{
+  background-color: #01677b;
+  margin-bottom: 20px;
+  margin-right: 15px;
+}
+
+.timepicker2{
+  background-color: #01677b;
+  margin-bottom: 20px;
+}
+
+.clock{
+  background-color: #01677b;
+}
+
+.react-time-picker__clock{
+  background-color: #17acc0!important;
+  border: thin solid #000000 !important;
+}
+
+.searchbtn{
+  background-color: #b0b8b9;
+}
