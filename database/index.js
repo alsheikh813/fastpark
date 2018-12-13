@@ -272,14 +272,14 @@ const savePark = (data, callback) => {
   });
   park.save(function (err) {
     if (err) throw err;
-    cb(true);
+    callback(true);
   });
 };
 
 // Find All Parks on Location:
 // finding all parks based on the provided location
 // using aggregation to get all the owner details from owners table
-const findParks = (query, cb) => {
+const findParks = (query, callback) => {
   db.collection("parks")
     .aggregate([
       { $match: { location: query } },
@@ -294,7 +294,7 @@ const findParks = (query, cb) => {
     ])
     .toArray(function (err, res) {
       if (err) throw err;
-      cb(res);
+      callback(res);
     });
 };
 
@@ -325,23 +325,23 @@ const findOwnerParks = (ownerId, callback) => {
 // Update Park: 
 //updating the park document with userId based on booking and checkout
 
-const updatePark = (parkId, userId, cb) => {
+const updatePark = (parkId, userId, callback) => {
   Park.updateOne({ _id: parkId }, { userId: userId }, function (err, res) {
     if (res) {
-      cb(true, null);
+      callback(true, null);
     } else {
-      cb(false, err);
+      callback(false, err);
     }
   });
 };
 
 // Delete Park:
-const deletePark = function (parkId, cb) {
+const deletePark = function (parkId, callback) {
   Park.deleteOne({ "_id": ObjectId(parkId) }, (err, res) => {
     if (err) {
       console.log("delete error", err)
     }
-    cb(res)
+    callback(res)
   });
 };
 
