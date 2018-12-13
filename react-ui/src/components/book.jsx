@@ -1,7 +1,7 @@
 import React from "react";
 import $ from "jquery";
-import { Alert } from "reactstrap";
-import { Link } from 'react-router-dom';
+
+
 
 import { Button } from "reactstrap";
 import { Container } from "reactstrap";
@@ -28,22 +28,22 @@ class book extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-  
+
       username: "",
       lat: "",
       long: "",
-      num: " ",
-      code:"",
-      name:"",
+      carednum: " ",
+      month:"",
+      year:"",
+      code: "",
+      name: "",
+      country:"",
+      zip:"",
       modalCheckOut: false,
       modalPayment: false,
       modalPaymentAlert: false,
       nestedModal: false,
       closeAll: false,
-      
-      
-
-
     };
     this.ratingCount = 0;
   }
@@ -94,10 +94,10 @@ class book extends React.Component {
   /* this function to give alert for cash and payment */
 
   toggleModalPaymentAlert = () => {
-    
+
     this.setState({
       modalPayment: !this.state.modalPayment,
-      
+
     });
     alert('your book has been confirmed!')
 
@@ -106,15 +106,12 @@ class book extends React.Component {
 
 
   toggleModalPayment = () => {
-   
+
     this.setState({
       modalPayment: !this.state.modalPayment,
-     
-      
-     
-    
     });
   };
+
 
   toggleNested = () => {
     this.setState({
@@ -135,27 +132,27 @@ class book extends React.Component {
       modalCheckOut: !this.state.modalCheckOut
     });
   };
-// make the input only accept numbers
+  // make the input only accept numbers
   onChange = (e) => {
     // const re = /^[0-9\b]+$/;
     // if (e.target.value === '' || re.test(e.target.value)) {
-       this.setState({
-        num: e.target.num
-        })
-  // }
- };
+    this.setState({
+      numcard: e.target.cardnum
+    })
+    // }
+  };
 
- onChangeName = (e) => {
-   this.setState({
-    name: e.target.name
-   })
- };
+  onChangeName = (e) => {
+    this.setState({
+      name: e.target.name
+    })
+  };
 
- onChangeCode = (e) => {
-  this.setState({
-   code: e.target.code
-  })
-};
+  onChangeCode = (e) => {
+    this.setState({
+      code: e.target.code
+    })
+  };
 
 
 
@@ -186,7 +183,7 @@ class book extends React.Component {
     return (
       <Container fluid>
         <div className="directionBtn">
-         
+
         </div>
         <div className="bookingCard">
 
@@ -227,15 +224,15 @@ class book extends React.Component {
               >
                 Direction
               </Button>{" "}
-            
+
               <Button color="danger" onClick={this.toggleModalPayment}>Payment
             </Button>{" "}
               <Modal isOpen={this.state.modalPayment}  >
                 <ModalHeader >Choose A Method</ModalHeader>
                 <ModalBody>
-                 
-                  <Button color="secondary"  onClick={this.toggleModalPaymentAlert}>Cash</Button>{' '}
-                  
+
+                  <Button color="secondary" onClick={this.toggleModalPaymentAlert}>Cash</Button>{' '}
+
 
                   <Button color="success" onClick={this.toggleNested}>Credit Card</Button>
                   <Modal isOpen={this.state.nestedModal} toggle={this.toggleNested} onClosed={this.state.closeAll ? this.toggleModalPayment : undefined}>
@@ -252,11 +249,11 @@ class book extends React.Component {
                             <div className="inputwithicon">
                               <Label for="exampleEmail" hidden>Card number</Label>
                               <Input type="text" name="card" id="cardnumber"
-                              
-                               value={this.state.value} onChange={this.onChange}
-                               placeholder="Card number"
-                             
-                               />
+
+                                value={this.state.value} onChange={this.onChange}
+                                placeholder="Card number"
+
+                              />
                               <i className=" fa fa-lock fa-xs" aria-hidden="true"></i>
                             </div>
                           </FormGroup>
@@ -305,10 +302,10 @@ class book extends React.Component {
                           <FormGroup>
                             <div className="inputwithicon" >
 
-                              <Label for="exampleZip"  hidden>Security code</Label>
+                              <Label for="exampleZip" hidden>Security code</Label>
                               <Input type="text" name="zip" id="exampleZip" placeholder="security code"
-                           value={this.state.code} onChange={this.onChangeCode}
-                               />
+                                value={this.state.code} onChange={this.onChangeCode}
+                              />
                               <i className=" far fa-question-circle" fa-xs aria-hidden="true" ></i>
                             </div>
                           </FormGroup>
@@ -320,10 +317,10 @@ class book extends React.Component {
 
                             <Label for="exampleEmail" hidden>NameOnCard</Label>
                             <Input type="text" name="card" id="cardnumber"
-                            name={this.state.name} onChange={this.onChangeName}
-                             placeholder="Name on card"
-                                
-                             />
+                              name={this.state.name} onChange={this.onChangeName}
+                              placeholder="Name on card"
+
+                            />
 
 
                           </FormGroup>
@@ -607,7 +604,7 @@ class book extends React.Component {
                   </Modal>
                 </ModalBody>
                 <ModalFooter>
-                 
+
                   <Button color="secondary" onClick={this.toggleModalPayment}>Cancel</Button>
                 </ModalFooter>
               </Modal>

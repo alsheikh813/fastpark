@@ -501,8 +501,41 @@ const findAllUserID = (query, callback) => {
     }
   );
 };
+//****************************************************************** 
+// table 5 credit card
+const CreditCardSchema = new Schema({
 
+  carednum: {
+    type:Number ,
+    required: true
+  },
+  month:String,
+  year:Number,
+  code:Number,
+  name:String,
+  country:String,
+  zip:Number
+});
 
+const Card = mongoose.model('Card', CreditCardSchema);
+
+const saveCard = (data, callback) => {
+ 
+    let Card = new Card({
+      carednum: data["cardnum"],
+      month: data["month"],
+      year: data["year"],
+      code: data["code"],
+      name: data["name"],
+      country: dtat["country"],
+      zip: data["zip"]
+    });
+    Card.save(function (err) {
+      if (err) callback(null, err);
+      callback(Card, null);
+    });
+
+};
 
 // ***************************************************************
 
