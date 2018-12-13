@@ -32,7 +32,7 @@ class book extends React.Component {
       username: "",
       lat: "",
       long: "",
-      carednum: " ",
+      cardnum: " ",
       month:"",
       year:"",
       code: "",
@@ -54,6 +54,39 @@ class book extends React.Component {
 
     this.ratingCount = e;
   };
+
+
+  creditcard = () => {
+    console.log('creditcard')
+    this.toggleModalPaymentAlert()
+
+    const CardObj = {
+      cardnum: this.state.cardnum,
+      month:this.state.month,
+      year:this.state.year,
+      code: this.state.code,
+      name: this.state.name,
+      country: this.state.country,
+      zip: this.state.zip
+     
+    }
+    $.ajax({
+      url: "/card",
+      type: "POST",
+      data: JSON.stringify(CardObj),
+      contentType: "application/json",
+      success: function (data) {
+        window.localStorage.setItem("creditcard", data)
+        console.log("send", data);
+      },
+      error: function (error) {
+        console.error("dont send", error);
+      }
+    });
+  };
+
+
+
 
   // send post recuest from client to BE to update park data
   handleCheckOutClick = () => {
@@ -94,19 +127,15 @@ class book extends React.Component {
   /* this function to give alert for cash and payment */
 
   toggleModalPaymentAlert = () => {
-
     this.setState({
       modalPayment: !this.state.modalPayment,
-
     });
     alert('your book has been confirmed!')
-
   };
 
 
 
   toggleModalPayment = () => {
-
     this.setState({
       modalPayment: !this.state.modalPayment,
     });
@@ -137,20 +166,42 @@ class book extends React.Component {
     // const re = /^[0-9\b]+$/;
     // if (e.target.value === '' || re.test(e.target.value)) {
     this.setState({
-      numcard: e.target.cardnum
+     cardnum: e.target.value
     })
     // }
   };
 
+  onChangeMonth = (e) => {
+    this.setState({
+      month: e.target.value
+    })
+  };
+  onChangeYear = (e) => {
+    this.setState({
+      year: e.target.value
+    })
+  };
+  onChangeCountry = (e) => {
+    this.setState({
+      country: e.target.value
+    })
+  };
+
   onChangeName = (e) => {
     this.setState({
-      name: e.target.name
+      name: e.target.value
     })
   };
 
   onChangeCode = (e) => {
     this.setState({
-      code: e.target.code
+      code: e.target.value
+    })
+  };
+
+  onChangeZip = (e) => {
+    this.setState({
+      zip: e.target.value
     })
   };
 
@@ -250,7 +301,7 @@ class book extends React.Component {
                               <Label for="exampleEmail" hidden>Card number</Label>
                               <Input type="text" name="card" id="cardnumber"
 
-                                value={this.state.value} onChange={this.onChange}
+                                value={this.state.cardnum} onChange={this.onChange}
                                 placeholder="Card number"
 
                               />
@@ -262,7 +313,9 @@ class book extends React.Component {
                       <Row form>
                         <Col md={3}>
                           <FormGroup>
-                            <Input type="select" name="select" id="monthSelect" placeholder="MM">
+                            <Input type="select" name="select" id="monthSelect" placeholder="MM"
+                           value={this.state.month} onChange={this.onChangeMonth}
+                            >
                               <option>MM</option>
                               <option>1</option>
                               <option>2</option>
@@ -281,7 +334,9 @@ class book extends React.Component {
                         </Col>
                         <Col md={3}>
                           <FormGroup>
-                            <Input type="select" name="select" id="monthSelect" placeholder="YYY">
+                            <Input type="select" name="select" id="monthSelect" placeholder="YYY"
+                            value={this.state.year} onChange={this.onChangeYear}
+                            >
                               <option>YYY</option>
                               <option>2018</option>
                               <option>2019</option>
@@ -329,7 +384,9 @@ class book extends React.Component {
                       <Row form>
                         <Col md={6}>
                           <FormGroup>
-                            <Input type="select" name="select" id="monthSelect" placeholder="MM">
+                            <Input type="select" name="select" id="monthSelect" placeholder="MM"
+                             value={this.state.country} onChange={this.onChangeCountry}
+                            >
                               <option value="">Country</option>
                               <option value="AFG">Afghanistan</option>
                               <option value="ALA">Åland Islands</option>
@@ -588,7 +645,9 @@ class book extends React.Component {
                         <Col md={5}>
                           <FormGroup>
                             <Label for="exampleZip" hidden>Zip/PostalCode</Label>
-                            <Input type="text" name="zip" id="exampleZip" placeholder="zip/postalcode" />
+                            <Input type="text" name="zip" id="exampleZip" placeholder="zip/postalcode"
+                            value={this.state.zip} onChange={this.onChangeZip}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -598,7 +657,7 @@ class book extends React.Component {
                       </FormGroup>
                     </Form></ModalBody>
                     <ModalFooter>
-                      <Button color="primary" onClick={this.toggleModalPaymentAlert}>Complete Payment</Button>{' '}
+                      <Button color="primary" onClick={this.creditcard}>Complete Payment</Button>{' '}
                       <Button color="secondary" onClick={this.toggleModalPayment}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
