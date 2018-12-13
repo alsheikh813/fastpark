@@ -64,7 +64,7 @@ class SearchResults extends Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid className="bgcolor">
         <Row>
           <Col sm="7">
             <ParksList parks={this.state.filteredParks.length ? this.state.filteredParks : this.state.parks} />

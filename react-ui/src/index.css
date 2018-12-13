@@ -145,4 +145,31 @@ padding: 50px;
    font-family: "Times New Roman", Times, serif;
 }
 
+.jumbotron{
+  background-color: #bfcad2 !important;
+}
 
+#root{
+  background-color: #186077 !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover
+{
+ /* color:white; */
+ text-decoration:none !important;
+ cursor:pointer !important;
+ color: white !important;
+}
+
+
+.liHover:hover{
+  background-color: cornflowerblue !important;
+}
+
+.bgcolor{
+  background-color: lightslategray !important;
+}
